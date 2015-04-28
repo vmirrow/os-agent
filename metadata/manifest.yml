@@ -3,14 +3,14 @@ Name: zabbix_agent
 Cartridge-Short-Name: zabbix_agent
 Display-Name: Zabbix Agent Cartridge
 Description: "Zabbix Agent - agent of zabbix monitoring server"
-Version: '2.4'
+Version: '2.0.8'
 Versions:
-- '2.4'
+- '2.0.8'
 License: Apache
 Vendor: Red Hat
 Source-Url: https://github.com/vmirrow/os-agent.git
 Cartridge-Version: 0.0.2
-Cartridge-Vendor: zabbix
+Cartridge-Vendor: mirrow
 Categories:
 - plugin
 - embedded
