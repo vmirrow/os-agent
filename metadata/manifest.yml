@@ -1,0 +1,38 @@
+---
+Name: zabbix-cart
+Cartridge-Short-Name: zabbix_agent
+Display-Name: Zabbix JBOSS Cartridge 0.0.2
+Description: "An zabbix cartridge to publishes metrics for your Jboss (AS,EAP,EWS) application to the Zabbix controller."
+Version: '3.9.6'
+Versions:
+- '3.9.6'
+License: ASL 2.0
+Vendor: Red Hat
+Cartridge-Version: 0.0.2
+Cartridge-Vendor: zabbix
+Categories:
+- plugin
+- embedded
+- zabbix
+Provides:
+- javaagent
+Cart-Data:
+- Key: ZABBIX_CONTROLLER_HOST_NAME
+  Type: environment
+  Description: This is the host name or the IP address of the Zabbix Controller.
+- Key: ZABBIX_CONTROLLER_PORT
+  Type: environment
+  Description: This is the http(s) port of the Zabbix Controller. 
+Publishes:
+Subscribes:
+Group-Overrides:
+  - components:
+    - web_framework
+    - zabbix  
+Endpoints:
+Scaling:
+  Min: 1
+  Max: -1
+Install-Build-Required: false
+Metrics:
+- uptime
