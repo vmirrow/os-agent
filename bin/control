@@ -1,0 +1,87 @@
+#!/bin/bash -eu
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+function status {
+  client_result "AppDynamics JBOSS cartridge is enabled."
+}
+
+
+# control start is called when the cartridge is added by add-cartridge as well as when code is pushed to git.
+# It is creating hooks in the application's .openshift directory that gets executed when the primary cartridge starts/restarts/reloads
+function start {
+
+	#Detecting primary cartridge
+	PRIMARY_CART=$(ruby_sdk "primary_cartridge_manifest['Name']")
+	client_message "The primary cartridge name is: ${PRIMARY_CART}"
+
+	case "$PRIMARY_CART" in 
+	  jbossas) 
+	    client_message "Valid primary cartridge detected - jbossas."
+	    ;;
+	  jbossas-7)
+        client_message "Valid primary cartridge detected - jbossas-7."
+	    ;;
+	  jbosseap)
+	    client_message "Valid primary cartridge detected - jbosseap."
+	    ;;
+	  jbossews)
+	    client_message "Valid primary cartridge detected - jbossews."
+	    ;;
+	  *)
+	    # Invalid cartridge type
+	    client_error "Invalid primary cartridge: ${PRIMARY_CART}. Valid ones: jbossas,jbossas-7,jbosseap,jbossews"
+	    exit 109 
+	    ;;
+	esac
+
+	HOOKS_ABS_PATH="${OPENSHIFT_REPO_DIR}.openshift/action_hooks/"
+	if [ ! -d "${HOOKS_ABS_PATH}" ]; then
+		mkdir -p $HOOKS_ABS_PATH
+	fi
+
+	# Using the hooks for primary cartridge to insert the javaagent options for AppD 
+	HOOKS="${HOOKS_ABS_PATH}pre_start_${PRIMARY_CART}
+	${HOOKS_ABS_PATH}pre_restart_${PRIMARY_CART}
+	${HOOKS_ABS_PATH}pre_reload_${PRIMARY_CART}"
+
+	CONF_COMMAND="source \${OPENSHIFT_APPD_JAVA_DIR}conf/javaagent_${PRIMARY_CART}.conf"
+
+	for hook in $HOOKS; do
+	  client_message "Processing $hook"
+
+	  if [ ! -e "$hook" ]; then
+	    echo '#!/bin/bash' >> $hook
+	    chmod 700 $hook
+	  fi
+
+	  if [ -w "$hook" ]; then
+	  	if grep -Fxq "$CONF_COMMAND" "$hook" ; then
+	    	client_message "The cartridge config command already exists."
+	  	else
+	  		echo -e "$CONF_COMMAND" >> $hook
+	  	fi	
+	  else
+	    client_message "WARNING: The file $hook is not writable."
+	  fi
+	done
+
+
+	client_message "AppDynamics JBOSS cartridge is started."
+}
+
+
+
+
+case "$1" in
+  start)
+    start
+    ;;
+  status)               
+    status 
+    ;;
+  *)        
+    exit 0
+esac
+
+exit 0
