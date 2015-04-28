@@ -5,6 +5,8 @@ case "$1" in
     version="$2"
 esac
 
+shopt -s dotglob
+
 mkdir -p $OPENSHIFT_ZABBIX_AGENT_DIR/configuration/etc/
 mkdir $OPENSHIFT_ZABBIX_AGENT_DIR/run
 mkdir $OPENSHIFT_ZABBIX_AGENT_DIR/log
