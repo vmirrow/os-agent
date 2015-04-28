@@ -1,12 +1,12 @@
 ---
-Name: zabbix-cart
+Name: zabbix_agent
 Cartridge-Short-Name: zabbix_agent
-Display-Name: Zabbix JBOSS Cartridge 0.0.2
-Description: "An zabbix cartridge to publishes metrics for your Jboss (AS,EAP,EWS) application to the Zabbix controller."
-Version: '3.9.6'
+Display-Name: Zabbix Agent Cartridge
+Description: "Zabbix Agent - agent of zabbix monitoring server"
+Version: '2.4'
 Versions:
-- '3.9.6'
-License: ASL 2.0
+- '2.4'
+License: Apache
 Vendor: Red Hat
 Source-Url: https://github.com/vmirrow/os-agent.git
 Cartridge-Version: 0.0.2
@@ -17,13 +17,15 @@ Categories:
 - zabbix
 Provides:
 - javaagent
+Requires:   
+- cron
 Cart-Data:
-- Key: ZABBIX_CONTROLLER_HOST_NAME
+- Key: ZABBIX_SERVER_IP
   Type: environment
-  Description: This is the host name or the IP address of the Zabbix Controller.
-- Key: ZABBIX_CONTROLLER_PORT
+  Description: This is the host name or the IP address of the Zabbix server.
+- Key: ZABBIX_SERVER_PORT
   Type: environment
-  Description: This is the http(s) port of the Zabbix Controller. 
+  Description: This is the port of the Zabbix server. 
 Publishes:
 Subscribes:
 Group-Overrides:
@@ -35,6 +37,4 @@ Scaling:
   Min: 1
   Max: -1
 Install-Build-Required: false
-Metrics:
-- uptime
 
