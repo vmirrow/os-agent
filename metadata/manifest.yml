@@ -8,6 +8,7 @@ Versions:
 - '3.9.6'
 License: ASL 2.0
 Vendor: Red Hat
+Source-Url: https://github.com/vmirrow/os-agent
 Cartridge-Version: 0.0.2
 Cartridge-Vendor: zabbix
 Categories:
